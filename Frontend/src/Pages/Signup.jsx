@@ -9,15 +9,83 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Link,
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { backendLink } from '../BackendLink';
+const initState = {
+  name: "",
+  email: "",
+  password: ""
+}
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState(initState)
+  const handleChange = e => {
+    const {name, value} = e.target
+    setState( { ...state, [name]: value} )
+  }
+  const toast = useToast();
+  const Navigate = useNavigate();
+  const HandleSubmit = async() => {
+    if (state.email.includes("@") && state.email.includes(".com")) {
+     await fetch(`${backendLink}/users/register`, {
+        method: "POST",
+        body: JSON.stringify(state),
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.message === "Email already register") {
+            toast({
+              title: "Account already register",
+              description: "Please Login ",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+            setTimeout(() => {
+              Navigate("/login");
+            }, 2200);
+          } else {
+            toast({
+              title: "Account has been created",
+              description: "Welcome to Apna Bazar",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+            setTimeout(() => {
+              Navigate("/login");
+            }, 2200);
+          }
+        })
+        .catch((err) => {
+          console.log("err :>> ", err);
+          toast({
+            title: "Signup  Failed",
+            description: "Please Enter All Data",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        });
+    } else {
+      toast({
+        title: "Invalid Email",
+        description: "Please Type correct email format",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
+  };
   return (
     <Flex
     minH={"90vh"}
@@ -30,12 +98,10 @@ function Signup() {
         <Heading fontSize={["2xl","2xl","3xl","3xl","3xl","3xl"]} textAlign={"center"}>
         Join The Geniobits Family!
         </Heading>
-        <NavLink to="/login">
           <Text fontSize={"lg"} color={"gray.600"}>
             Already have an account? Please
-            <Link color={"blue.400"}> Login</Link> ✌️
+            <NavLink to="/login" color={"blue.400"}> Login</NavLink> ✌️
           </Text>
-        </NavLink>
       </Stack>
       <Box
         rounded={"lg"}
@@ -49,6 +115,9 @@ function Signup() {
             <Input
               type="text"
               placeholder="Enter Your Name"
+              name="name"
+              value={state.name}
+              onChange={handleChange}
             />
           </FormControl>
           <FormControl id="email" isRequired>
@@ -56,6 +125,9 @@ function Signup() {
             <Input
               type="email"
               placeholder="Enter Your Email"
+              name="email"
+              value={state.email}
+              onChange={handleChange}
             />
           </FormControl>
           <FormControl id="password" isRequired>
@@ -64,6 +136,9 @@ function Signup() {
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Your Password"
+                name="password"
+                value={state.password}
+                onChange={handleChange}
               />
               <InputRightElement h={"full"}>
                 <Button
@@ -86,6 +161,7 @@ function Signup() {
               _hover={{
                 bg: "blue.500",
               }}
+              onClick={HandleSubmit}
             >
               Sign up
             </Button>
@@ -93,9 +169,7 @@ function Signup() {
           <Stack pt={6}>
             <Text align={"center"}>
               Already a user?{" "}
-              <NavLink to="/login">
-                <Link color={"blue.400"}>Login</Link>
-              </NavLink>
+                <NavLink to="/login" color={"blue.400"}>Login</NavLink>
             </Text>
           </Stack>
         </Stack>

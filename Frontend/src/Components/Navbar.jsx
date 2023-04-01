@@ -14,7 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 function Navbar() {
+  const { isAuth } = useSelector((store) => store.AuthManager);
   const [isSmallerThan420px] = useMediaQuery("(max-width: 420px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -44,20 +46,34 @@ function Navbar() {
           >
             <NavLink to="/"> Recipes</NavLink>
           </Heading>
-          <Heading
+          {!isAuth&&<Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
             size={["md", "lg", "xl"]}
           >
             <NavLink to="/login">Login</NavLink>
-          </Heading>
-          <Heading
+          </Heading>}
+         {!isAuth && <Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
             size={["md", "lg", "xl"]}
           >
             <NavLink to="/signup"> Signup</NavLink>
-          </Heading>
+          </Heading>}
+         {isAuth && <Heading
+            cursor={"pointer"}
+            _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
+          >
+            <NavLink to="/myrecipes"> My Recipes</NavLink>
+          </Heading>}
+         {isAuth && <Heading
+            cursor={"pointer"}
+            _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
+          >
+            <NavLink to="/savedrecipes"> Saved Recipes</NavLink>
+          </Heading>}
         </HStack>
       )}
       {isSmallerThan420px && (
@@ -101,24 +117,24 @@ function Navbar() {
               <DrawerBody
                 backgroundColor={"#EA8FEA"}
                 display={"grid"}
-                py={"20vh"}
+                py={"30vh"}
                 justifyContent={"space-evenly"}
                 alignItems={"center"}
               >
                 <Heading size={"md"}>Account</Heading>
-                <Heading size={"md"}>
+               {!isAuth &&  <Heading onClick={onClose} size={"md"}>
                   <NavLink to="/login">Login</NavLink>
-                </Heading>
-                <Heading size={"md"}>
+                </Heading>}
+               {!isAuth &&  <Heading onClick={onClose} size={"md"}>
                   <NavLink to="/signup">Signup</NavLink>
-                </Heading>
-                <Heading size={"md"}>
+                </Heading>}
+                {isAuth && <Heading onClick={onClose} size={"md"}>
                   <NavLink to="/myrecipes">My Recipes</NavLink>
-                </Heading>
-                <Heading size={"md"}>
+                </Heading>}
+                {isAuth && <Heading onClick={onClose} size={"md"}>
                   <NavLink to="/savedrecipes">Saved Recipes</NavLink>
-                </Heading>
-                <Heading size={"md"}>Logout</Heading>
+                </Heading>}
+              {isAuth &&   <Heading onClick={onClose} size={"md"}>Logout</Heading>}
               </DrawerBody>
             </DrawerContent>
           </Drawer>
