@@ -1,23 +1,22 @@
 import React from "react";
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   HStack,
   Heading,
   Image,
-  Input,
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 function Navbar() {
+  const { isAuth } = useSelector((store) => store.AuthManager);
   const [isSmallerThan420px] = useMediaQuery("(max-width: 420px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -45,20 +44,36 @@ function Navbar() {
             _hover={{ color: "red", textDecoration: "underline" }}
             size={["md", "lg", "xl"]}
           >
-            Recipes
+            <NavLink to="/"> Recipes</NavLink>
           </Heading>
-          <Heading
+          {!isAuth&&<Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
           >
-            Login
-          </Heading>
-          <Heading
+            <NavLink to="/login">Login</NavLink>
+          </Heading>}
+         {!isAuth && <Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
           >
-            Signup
-          </Heading>
+            <NavLink to="/signup"> Signup</NavLink>
+          </Heading>}
+         {isAuth && <Heading
+            cursor={"pointer"}
+            _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
+          >
+            <NavLink to="/myrecipes"> My Recipes</NavLink>
+          </Heading>}
+         {isAuth && <Heading
+            cursor={"pointer"}
+            _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
+          >
+            <NavLink to="/savedrecipes"> Saved Recipes</NavLink>
+          </Heading>}
         </HStack>
       )}
       {isSmallerThan420px && (
@@ -78,7 +93,10 @@ function Navbar() {
               alt="logo"
             />
           </Box>
-          <Heading size={"2xl"}>Recipes</Heading>
+          <Heading size={"2xl"}>
+            {" "}
+            <NavLink to="/"> Recipes</NavLink>
+          </Heading>
           <GiHamburgerMenu
             cursor={"pointer"}
             ref={btnRef}
@@ -99,16 +117,24 @@ function Navbar() {
               <DrawerBody
                 backgroundColor={"#EA8FEA"}
                 display={"grid"}
-                py={"20vh"}
+                py={"30vh"}
                 justifyContent={"space-evenly"}
                 alignItems={"center"}
               >
                 <Heading size={"md"}>Account</Heading>
-                <Heading size={"md"}>Login</Heading>
-                <Heading size={"md"}>Signup</Heading>
-                <Heading size={"md"}>My Recipes</Heading>
-                <Heading size={"md"}>Saved Recipes</Heading>
-                <Heading size={"md"}>Logout</Heading>
+               {!isAuth &&  <Heading onClick={onClose} size={"md"}>
+                  <NavLink to="/login">Login</NavLink>
+                </Heading>}
+               {!isAuth &&  <Heading onClick={onClose} size={"md"}>
+                  <NavLink to="/signup">Signup</NavLink>
+                </Heading>}
+                {isAuth && <Heading onClick={onClose} size={"md"}>
+                  <NavLink to="/myrecipes">My Recipes</NavLink>
+                </Heading>}
+                {isAuth && <Heading onClick={onClose} size={"md"}>
+                  <NavLink to="/savedrecipes">Saved Recipes</NavLink>
+                </Heading>}
+              {isAuth &&   <Heading onClick={onClose} size={"md"}>Logout</Heading>}
               </DrawerBody>
             </DrawerContent>
           </Drawer>
