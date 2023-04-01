@@ -1,22 +1,19 @@
 import React from "react";
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   HStack,
   Heading,
   Image,
-  Input,
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { NavLink } from "react-router-dom";
 function Navbar() {
   const [isSmallerThan420px] = useMediaQuery("(max-width: 420px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,19 +42,21 @@ function Navbar() {
             _hover={{ color: "red", textDecoration: "underline" }}
             size={["md", "lg", "xl"]}
           >
-            Recipes
+            <NavLink to="/"> Recipes</NavLink>
           </Heading>
           <Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
           >
-            Login
+            <NavLink to="/login">Login</NavLink>
           </Heading>
           <Heading
             cursor={"pointer"}
             _hover={{ color: "red", textDecoration: "underline" }}
+            size={["md", "lg", "xl"]}
           >
-            Signup
+            <NavLink to="/signup"> Signup</NavLink>
           </Heading>
         </HStack>
       )}
@@ -78,7 +77,10 @@ function Navbar() {
               alt="logo"
             />
           </Box>
-          <Heading size={"2xl"}>Recipes</Heading>
+          <Heading size={"2xl"}>
+            {" "}
+            <NavLink to="/"> Recipes</NavLink>
+          </Heading>
           <GiHamburgerMenu
             cursor={"pointer"}
             ref={btnRef}
@@ -104,10 +106,18 @@ function Navbar() {
                 alignItems={"center"}
               >
                 <Heading size={"md"}>Account</Heading>
-                <Heading size={"md"}>Login</Heading>
-                <Heading size={"md"}>Signup</Heading>
-                <Heading size={"md"}>My Recipes</Heading>
-                <Heading size={"md"}>Saved Recipes</Heading>
+                <Heading size={"md"}>
+                  <NavLink to="/login">Login</NavLink>
+                </Heading>
+                <Heading size={"md"}>
+                  <NavLink to="/signup">Signup</NavLink>
+                </Heading>
+                <Heading size={"md"}>
+                  <NavLink to="/myrecipes">My Recipes</NavLink>
+                </Heading>
+                <Heading size={"md"}>
+                  <NavLink to="/savedrecipes">Saved Recipes</NavLink>
+                </Heading>
                 <Heading size={"md"}>Logout</Heading>
               </DrawerBody>
             </DrawerContent>
